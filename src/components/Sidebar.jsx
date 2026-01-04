@@ -98,7 +98,7 @@ export default function Sidebar() {
                 <span className="text-white font-bold">H</span>
               </div>
               <div>
-                <h1 className="text-white font-bold text-lg">Keeva</h1>
+                <h1 className="text-white font-bold text-lg">Helpana</h1>
                 <p className="text-slate-400 text-xs">Admin Panel</p>
               </div>
             </div>
