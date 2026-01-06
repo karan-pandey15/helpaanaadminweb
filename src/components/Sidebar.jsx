@@ -19,7 +19,8 @@ import {
   Menu,
   X,
   DollarSign,
-  UserCog
+  UserCog,
+  Building2
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -27,6 +28,8 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false); 
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [hotelsOpen, setHotelsOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const pathname = usePathname();
 
   const menuItems = [
@@ -42,6 +45,16 @@ export default function Sidebar() {
     const ProductsItems = [
   { path: "/pages/products", icon: BarChart2, label: "Add Products" },
     { path: "/pages/displayproducts", label: "All Products" }, 
+  ];
+
+  const HotelsItems = [
+    { path: "/pages/hotels/register", label: "Hotel Registration" },
+    { path: "/pages/hotels/all", label: "View Hotel Registration" },
+  ];
+
+  const ServicesItems = [
+    { path: "/pages/services/register", label: "Service Partner Registration" },
+    { path: "/pages/services/all", label: "View Service Partner" },
   ];
 
   const moreMenu = [ 
@@ -60,6 +73,8 @@ export default function Sidebar() {
   const isServiceActive = pathname.startsWith("/pages/services");
   const isPartnerActive = pathname.startsWith("/pages/partners");
   const isProductsActive = pathname.startsWith("/pages/products") || pathname.startsWith("/pages/displayproducts");
+  const isHotelsActive = pathname.startsWith("/pages/hotels");
+  const isServicesActive = pathname.startsWith("/pages/services");
 
   return (
     <>
@@ -200,6 +215,80 @@ export default function Sidebar() {
                     `}
                   >
                     {p.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+            
+          </div>
+
+          {/* HOTELS DROPDOWN */}
+          <div>
+            <button
+              onClick={() => setHotelsOpen(!hotelsOpen)}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl
+                ${isHotelsActive ? "bg-indigo-600 text-white" : "text-slate-300 hover:bg-slate-700/40"}
+              `}
+            >
+              <div className="flex items-center gap-4">
+                <Building2 className={`${open ? "" : "mx-auto"}`} />
+                {open && <span>Hotels</span>}
+              </div>
+              {open && (
+                <ChevronDown className={`transition ${hotelsOpen ? "rotate-180" : ""}`} />
+              )}
+            </button>
+
+            {hotelsOpen && open && (
+              <div className="ml-6 mt-1 space-y-1 border-l border-slate-700 pl-3">
+                {HotelsItems.map((h) => (
+                  <Link
+                    key={h.path}
+                    href={h.path}
+                    className={`block px-3 py-2 rounded-lg text-sm
+                      ${isActive(h.path)
+                        ? "bg-indigo-600/30 text-indigo-300"
+                        : "text-slate-400 hover:bg-slate-700/30"}
+                    `}
+                  >
+                    {h.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+            
+          </div>
+
+          {/* SERVICES DROPDOWN */}
+          <div>
+            <button
+              onClick={() => setServicesOpen(!servicesOpen)}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl
+                ${isServicesActive ? "bg-indigo-600 text-white" : "text-slate-300 hover:bg-slate-700/40"}
+              `}
+            >
+              <div className="flex items-center gap-4">
+                <Wrench className={`${open ? "" : "mx-auto"}`} />
+                {open && <span>Service Partners</span>}
+              </div>
+              {open && (
+                <ChevronDown className={`transition ${servicesOpen ? "rotate-180" : ""}`} />
+              )}
+            </button>
+
+            {servicesOpen && open && (
+              <div className="ml-6 mt-1 space-y-1 border-l border-slate-700 pl-3">
+                {ServicesItems.map((s) => (
+                  <Link
+                    key={s.path}
+                    href={s.path}
+                    className={`block px-3 py-2 rounded-lg text-sm
+                      ${isActive(s.path)
+                        ? "bg-indigo-600/30 text-indigo-300"
+                        : "text-slate-400 hover:bg-slate-700/30"}
+                    `}
+                  >
+                    {s.label}
                   </Link>
                 ))}
               </div>

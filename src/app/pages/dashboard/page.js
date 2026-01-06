@@ -4,7 +4,6 @@ import {
   Users,
   ShoppingCart,
   Handshake,
-
   CreditCard,
   Ticket,
   Briefcase,
@@ -12,7 +11,16 @@ import {
   Activity,
   ArrowUp,
   ArrowDown,
+  Building2,
+  MapPin,
+  Star,
+  Clock,
+  ChevronRight,
+  Phone,
+  BadgeCheck,
+  Car,
 } from "lucide-react"; 
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
     users: 0,
@@ -20,6 +28,7 @@ export default function AdminDashboard() {
     partners: 0,
     payments: 0,
     coupons: 0, 
+    hotels: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -30,9 +39,6 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     setLoading(true);
- 
-
-     
     const token = localStorage.getItem("token");
     const headers = {
       "Content-Type": "application/json",
@@ -46,6 +52,7 @@ export default function AdminDashboard() {
         { url: "/admin/partners", key: "partners" },
         { url: "/admin/payments", key: "payments" },
         { url: "/admin/coupons", key: "coupons" }, 
+        { url: "/api/hotels", key: "hotels" },
       ];
 
       const responses = await Promise.all(
@@ -62,6 +69,7 @@ export default function AdminDashboard() {
         partners: responses[2]?.partners?.length || 0,
         payments: responses[3]?.payments?.length || 0,
         coupons: responses[4]?.coupons?.length || 0, 
+        hotels: responses[5]?.hotelRooms?.length || 0,
       };
 
       setStats(newStats);
@@ -98,8 +106,6 @@ export default function AdminDashboard() {
       </svg>
     );
   };
- 
- 
 
   const cards = [
     {
@@ -151,6 +157,16 @@ export default function AdminDashboard() {
       change: "-2.4%",
       isPositive: false,
       chartData: [40, 38, 35, 32, 30, 28],
+    },
+    {
+      id: "hotels",
+      title: "Hotels",
+      count: stats.hotels,
+      icon: Building2,
+      gradient: "from-indigo-500 to-indigo-600",
+      change: "+15.2%",
+      isPositive: true,
+      chartData: [40, 45, 48, 52, 58, 65],
     },   
   ];
 
@@ -161,40 +177,25 @@ export default function AdminDashboard() {
     if (card.id === "payments") window.location.href = "/pages/payments";
     if (card.id === "coupons") window.location.href = "/pages/coupons";
     if (card.id === "services") window.location.href = "/pages/service/getservice";
+    if (card.id === "hotels") window.location.href = "/pages/hotels/all";
   };
 
-  const weeklyData = [
-    { label: "Mon", value: 120 },
-    { label: "Tue", value: 150 },
-    { label: "Wed", value: 180 },
-    { label: "Thu", value: 140 },
-    { label: "Fri", value: 200 },
-    { label: "Sat", value: 170 },
-    { label: "Sun", value: 190 },
-  ];
-
-  const trendData = [
-    { label: "Jan", value: 300 },
-    { label: "Feb", value: 350 },
-    { label: "Mar", value: 400 },
-    { label: "Apr", value: 380 },
-    { label: "May", value: 450 },
-    { label: "Jun", value: 500 },
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50 p-3 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50/50 p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="mb-6 sm:mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
-            <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-              Dashboard
-            </h1>
-            <p className="text-xs sm:text-sm text-gray-600">Welcome back Here is what is happening today.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            Dashboard Overview
+          </h1>
+          <p className="text-gray-500 mt-1">Welcome back! Monitor your business performance here.</p>
+        </div>
+        <div className="flex items-center gap-3">
+      
+          <div className="h-8 w-px bg-gray-200 mx-2 hidden sm:block"></div>
+          <div className="text-right hidden sm:block">
+            <p className="text-xs font-semibold text-gray-900">Admin User</p>
+         
           </div>
         </div>
       </div>
@@ -209,7 +210,7 @@ export default function AdminDashboard() {
       ) : (
         <>
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-10">
             {cards.map((card, index) => {
               const Icon = card.icon;
               const TrendIcon = card.isPositive ? ArrowUp : ArrowDown;
@@ -260,7 +261,34 @@ export default function AdminDashboard() {
             })}
           </div>
 
-      
+          {/* Quick Actions */}
+          <div className="mb-10">
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
+              Quick Actions
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+              {[
+                { label: "Add Hotel", icon: Building2, color: "bg-blue-50 text-blue-600", path: "/pages/hotels/register" },
+                { label: "Add Partner", icon: Handshake, color: "bg-rose-50 text-rose-600", path: "/pages/partners/add" },
+                { label: "New Coupon", icon: Ticket, color: "bg-amber-50 text-amber-600", path: "/pages/coupons/add" },
+                { label: "All Users", icon: Users, color: "bg-teal-50 text-teal-600", path: "/pages/users" },
+                { label: "Orders", icon: ShoppingCart, color: "bg-purple-50 text-purple-600", path: "/pages/orders" },
+                { label: "Payments", icon: CreditCard, color: "bg-indigo-50 text-indigo-600", path: "/pages/payments" },
+              ].map((action, i) => (
+                <button
+                  key={i}
+                  onClick={() => window.location.href = action.path}
+                  className="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all group"
+                >
+                  <div className={`p-3 rounded-xl ${action.color} mb-3 group-hover:scale-110 transition-transform`}>
+                    <action.icon size={20} />
+                  </div>
+                  <span className="text-xs font-semibold text-gray-700">{action.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </>
       )}
     </div>
