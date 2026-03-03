@@ -20,7 +20,8 @@ import {
   X,
   DollarSign,
   UserCog,
-  Building2
+  Building2,
+  Dumbbell
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -29,6 +30,7 @@ export default function Sidebar() {
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [hotelsOpen, setHotelsOpen] = useState(false);
+  const [gymOpen, setGymOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const pathname = usePathname();
 
@@ -50,6 +52,11 @@ export default function Sidebar() {
   const HotelsItems = [
     { path: "/pages/hotels/register", label: "Hotel Registration" },
     { path: "/pages/hotels/all", label: "View Hotel Registration" },
+  ];
+
+  const GymItems = [
+    { path: "/pages/gym/register", label: "Gym Membership Registration" },
+    { path: "/pages/gym/all", label: "View Gym Membership" },
   ];
 
   const ServicesItems = [
@@ -74,6 +81,7 @@ export default function Sidebar() {
   const isPartnerActive = pathname.startsWith("/pages/partners");
   const isProductsActive = pathname.startsWith("/pages/products") || pathname.startsWith("/pages/displayproducts");
   const isHotelsActive = pathname.startsWith("/pages/hotels");
+  const isGymActive = pathname.startsWith("/pages/gym");
   const isServicesActive = pathname.startsWith("/pages/services");
 
   return (
@@ -252,6 +260,43 @@ export default function Sidebar() {
                     `}
                   >
                     {h.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+            
+          </div>
+
+          {/* GYM DROPDOWN */}
+          <div>
+            <button
+              onClick={() => setGymOpen(!gymOpen)}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl
+                ${isGymActive ? "bg-indigo-600 text-white" : "text-slate-300 hover:bg-slate-700/40"}
+              `}
+            >
+              <div className="flex items-center gap-4">
+                <Dumbbell className={`${open ? "" : "mx-auto"}`} />
+                {open && <span>Gym Membership</span>}
+              </div>
+              {open && (
+                <ChevronDown className={`transition ${gymOpen ? "rotate-180" : ""}`} />
+              )}
+            </button>
+
+            {gymOpen && open && (
+              <div className="ml-6 mt-1 space-y-1 border-l border-slate-700 pl-3">
+                {GymItems.map((g) => (
+                  <Link
+                    key={g.path}
+                    href={g.path}
+                    className={`block px-3 py-2 rounded-lg text-sm
+                      ${isActive(g.path)
+                        ? "bg-indigo-600/30 text-indigo-300"
+                        : "text-slate-400 hover:bg-slate-700/30"}
+                    `}
+                  >
+                    {g.label}
                   </Link>
                 ))}
               </div>
