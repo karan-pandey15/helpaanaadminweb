@@ -378,6 +378,8 @@ export default function CreateProduct() {
                     <option value="Snacks & drinks">Snacks & drinks </option>
                     <option value="Beauty & wellness">Beauty & wellness</option>
                     <option value="Ecommerce">Ecommerce</option>
+                    <option value="dealday">Deal of The day</option>
+
 
  
 
